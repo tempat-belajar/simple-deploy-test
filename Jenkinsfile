@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/username/simple-deploy-test.git'
+                    url: 'https://github.com/tempat-belajar/simple-deploy-test.git'
             }
         }
 
