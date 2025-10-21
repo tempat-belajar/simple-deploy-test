@@ -2,40 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/tempat-belajar/simple-deploy-test.git',
-                    credentialsId: 'simple-deploy'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'docker build -t simple-web:latest .'
-                }
+                echo '🛠️ Building Docker Image...'
+                sh 'docker build -t simple-web:latest .'
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    sh '''
-                    docker ps -q --filter "name=simple-web" | grep -q . && docker stop simple-web && docker rm simple-web || true
-                    docker run -d --name simple-web -p 8085:80 simple-web:latest
-                    '''
-                }
+                echo '🚀 Deploying container...'
+                sh 'docker run -d --name simple-web -p 8081:80 simple-web:latest || true'
             }
         }
     }
 
     post {
         success {
-            echo "🚀 Deployment success! Akses di http://<server_ip>:8085"
+            echo '✅ Deployment successful!'
         }
         failure {
-            echo "❌ Deployment failed!"
+            echo '❌ Deployment failed!'
         }
     }
 }
